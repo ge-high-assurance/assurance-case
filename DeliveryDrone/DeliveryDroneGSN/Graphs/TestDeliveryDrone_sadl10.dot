@@ -1,0 +1,195 @@
+digraph gTestDeliveryDrone_sadl10 {
+    label="Cmd 11  (Graph)";
+    labelloc=top;
+    labeljust=left;
+     n1[shape=box label="G1.1.3
+The loss of availability of actuation 
+
+shall be less than 1e-07 pfh "];
+     n2[shape=box label="C3
+
+
+The actuation subsystem of a drone" shape=box style=rounded];
+     n1->n2[label="inContextOf"];
+     n3[shape=box label="G1.2
+The delivery information shall be reliable 
+
+"];
+     n4[shape=box label="C1
+
+
+A package delivery drone" shape=box style=rounded];
+     n3->n4[label="inContextOf"];
+          n3->n4[label="inContextOf"];
+     n5[shape=box label="S1.1.1
+Argument: By G1.1.1.1, the actuation 
+and delivery mechanisms have no integrity 
+or availability concerns" shape=parallelogram];
+     n6[shape=box label="C6
+The resilience to malicious commands 
+has a hazardous integrity concern if 
+the  delivery mechanism has an integrity concern." shape=box style=rounded];
+     n5->n6[label="inContextOf"];
+          n7[shape=box label="C6
+A concern affecting the resilience to 
+
+malicious commands" shape=box style=rounded];
+     n5->n7[label="inContextOf"];
+          n8[shape=box label="C6
+The resilience to the loss of delivery 
+ability has a hazardous integrity concern 
+if the actuation or delivery mechanism have an integrity or availability concern." shape=box style=rounded];
+     n5->n8[label="inContextOf"];
+     n9[shape=box label="G1.1.2
+The drone's resilience to malicious 
+commands shall have integrity concern 
+less severe than Hazardous"];
+     n9->n4[label="inContextOf"];
+          n9->n4[label="inContextOf"];
+     n10[shape=box label="G1.1.1.1
+The actuation and delivery mechanism 
+shall have no integrity or availability 
+concerns"];
+     n11[shape=box label="C4
+The deliveryItemMechanism subsystem 
+
+of a drone" shape=box style=rounded];
+     n10->n11[label="inContextOf"];
+     n12[shape=box label="G1
+The drone shall complete delivering 
+a package to an intended location in 
+a reliable manner"];
+     n13[shape=box label="C2
+The event of a package being delivered 
+
+to an intended location" shape=box style=rounded];
+     n12->n13[label="inContextOf"];
+          n12->n13[label="inContextOf"];
+          n12->n4[label="inContextOf"];
+          n12->n4[label="inContextOf"];
+          n10->n4[label="inContextOf"];
+          n10->n4[label="inContextOf"];
+     n14[shape=box label="G1.1.1
+The drone's resilience to the loss of 
+delivery ability shall have integrity 
+concern less severe than Hazardous"];
+     n15[shape=box label="C5
+A concern affecting the resilience to 
+
+loss of delivery ability" shape=box style=rounded];
+     n14->n15[label="inContextOf"];
+     n16[shape=box label="S1.1.2.1
+Argument: The probabilities are confirmed 
+by attack/defense tree analysis performed 
+by Soteria++" shape=parallelogram];
+     n17[shape=box label="C9
+
+
+CASE Consolidated properties." shape=box style=rounded];
+     n16->n17[label="inContextOf"];
+     n18[shape=box label="G1.2.1
+The loss of integrity of delivery information 
+
+shall be less than 1e-07 pfh "];
+     n18->n11[label="inContextOf"];
+          n10->n2[label="inContextOf"];
+     n19[shape=box label="G1.1.2.1
+The delivery mechanism shall not have 
+
+any integrity concern"];
+     n19->n4[label="inContextOf"];
+          n19->n4[label="inContextOf"];
+          n3->n13[label="inContextOf"];
+          n3->n13[label="inContextOf"];
+     n20[shape=box label="G1.1
+The drone shall complete delivering 
+
+a package to an intended location"];
+     n20->n13[label="inContextOf"];
+          n20->n13[label="inContextOf"];
+     n21[shape=box label="S1.1.1.1
+Argument: The probability that actuation 
+and delivery mechanism will have no 
+concerns is confirmed by attack/defense tree analysis performed by Soteria++" shape=parallelogram];
+     n22[shape=box label="C10
+
+
+CASE Consolidated properties." shape=box style=rounded];
+     n21->n22[label="inContextOf"];
+          n19->n11[label="inContextOf"];
+          n18->n4[label="inContextOf"];
+          n18->n4[label="inContextOf"];
+          n14->n4[label="inContextOf"];
+          n14->n4[label="inContextOf"];
+          n1->n4[label="inContextOf"];
+          n1->n4[label="inContextOf"];
+          n9->n6[label="inContextOf"];
+          n9->n7[label="inContextOf"];
+          n9->n8[label="inContextOf"];
+          n20->n4[label="inContextOf"];
+          n20->n4[label="inContextOf"];
+     n23[shape=box label="S1.1.2
+Argument: By G1.1.2.1, The delivery 
+mechanism does not have any integrity 
+concern" shape=parallelogram];
+     n23->n6[label="inContextOf"];
+          n23->n7[label="inContextOf"];
+          n23->n8[label="inContextOf"];
+          n23->n19[label="supportedBy"];
+          n19->n16[label="supportedBy"];
+          n24[shape=box label="S1.2
+Argument: By G1.2.1, the delivery mechanism 
+will perform within acceptable error 
+bounds" shape=parallelogram];
+     n3->n24[label="supportedBy"];
+          n25[shape=box label="S1
+Argument: By conjunction of G1.1 and 
+G1.2, the delivery event will be completed 
+in a reliable manner" shape=parallelogram];
+     n12->n25[label="supportedBy"];
+     n26[shape=box label="S1.2.1
+Argument: The probabilities are confirmed 
+by fault-tree analysis performed by 
+Soteria++" shape=parallelogram];
+     n27[shape=box label="E4
+Soteria++ output of probability of the 
+
+minimum cutset" shape=circle];
+     n26->n27[label="supportedBy"];
+          n25->n20[label="supportedBy"];
+     n28[shape=box label="S1.1
+Argument: By conjunction of G1.1.1, 
+G1.1.2, and G1.1.3, the actuator and 
+delivery mechanism will perform their respective functions within acceptable error bounds" shape=parallelogram];
+     n28->n9[label="supportedBy"];
+          n25->n3[label="supportedBy"];
+          n29[shape=box label="E2
+Soteria++ output of probability of the 
+
+minimum cutset" shape=circle];
+     n16->n29[label="supportedBy"];
+          n5->n10[label="supportedBy"];
+          n14->n5[label="supportedBy"];
+     n30[shape=box label="S1.1.3
+Argument: The probabilities are confirmed 
+by fault-tree analysis performed by 
+Soteria++" shape=parallelogram];
+     n31[shape=box label="E3
+Soteria++ output of probability of the 
+
+minimum cutset" shape=circle];
+     n30->n31[label="supportedBy"];
+          n32[shape=box label="E1
+Soteria++ output of probability of the 
+
+minimum cutsets" shape=circle];
+     n21->n32[label="supportedBy"];
+          n24->n18[label="supportedBy"];
+          n9->n23[label="supportedBy"];
+          n28->n14[label="supportedBy"];
+          n18->n26[label="supportedBy"];
+          n1->n30[label="supportedBy"];
+          n10->n21[label="supportedBy"];
+          n20->n28[label="supportedBy"];
+          n28->n1[label="supportedBy"];
+}

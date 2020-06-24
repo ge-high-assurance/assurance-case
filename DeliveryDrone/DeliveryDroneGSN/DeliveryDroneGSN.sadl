@@ -1,0 +1,274 @@
+ uri "http://sadl.org/DeliveryDroneGSN.sadl" alias DeliveryDroneGSN.
+ 
+ import "http://sadl.org/gsn.sadl".
+ import "http://sadl.org/DeliveryDrone.sadl".
+
+ GSNDeliveryDrone is a GSN with rootGoal G1.
+ //rootgoal --> Top level mission requirement (interpreted a combination of MReq01 and MReq02)
+ G1 (note "The drone shall complete delivering a package to an intended location in a reliable manner") is a Goal, //The top-level goal
+ 	with inContextOf (an ExplanatoryContext C1 with reference (a Drone) with description "A package delivery drone"),
+ 	with inContextOf (an ExplanatoryContext C2 with reference (a DeliveryEvent) 
+ 		 with description "The event of a package being delivered to an intended location"
+ 	)
+ 	has claim (a Claim with claimStatement
+ 					(a TriplePattern with gpSubject (the Drone),		
+ 									 with gpPredicate performs,
+ 									 with gpObject (the DeliveryEvent)),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the DeliveryEvent),
+ 									 with gpPredicate completed, 
+ 									 with gpObject true),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the DeliveryEvent),
+ 									 with gpPredicate information,
+ 									 with gpObject (a DeliveryInformation)),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the DeliveryInformation),
+ 									 with gpPredicate reliability,
+ 									 with gpObject true) 									 
+ 	           ).
+ 	
+ S1 (note "Argument: By conjunction of G1.1 and G1.2, the delivery event will be completed in a reliable manner") is a Strategy.
+ 
+ G1 supportedBy S1 .
+ S1 supportedBy G1.1 .
+ S1 supportedBy G1.2 .
+ 
+  //left subtree of G1
+ G1.1 (note "The drone shall complete delivering a package to an intended location") is a Goal, //(MReq01)
+ 	with inContextOf (a ReferentialContext C1),  //Referencing the drone with the context C1 defined previously
+ 	with inContextOf (a ReferentialContext C2),  //Referencing the delivery event with the context C2 defined previously
+ 	has claim (a Claim with claimStatement
+ 					(a TriplePattern with gpSubject (the Drone),		
+ 									 with gpPredicate performs,
+ 									 with gpObject (the DeliveryEvent)),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the DeliveryEvent),
+ 									 with gpPredicate completed,
+ 									 with gpObject true)
+ 	           ).
+ 	
+ 	
+ S1.1 (note "Argument: By conjunction of G1.1.1, G1.1.2, and G1.1.3, the actuator and delivery mechanism will perform their respective functions within acceptable error bounds") is a Strategy.
+ 
+ G1.1 supportedBy S1.1 .
+ S1.1 supportedBy G1.1.1 .
+ S1.1 supportedBy G1.1.2 .
+ S1.1 supportedBy G1.1.3 . 
+
+ //start of CyberReq01 subtree
+ G1.1.1 (note "The drone's resilience to the loss of delivery ability shall have integrity concern less severe than Hazardous") is a Goal, //(CyberReq01)  
+	with inContextOf (a ReferentialContext C1), //Referencing the drone with the context C1 defined previously
+	with inContextOf (a ExplanatoryContext C5 with reference (a Concern) with description "A concern affecting the resilience to loss of delivery ability"),
+	has claim (a Claim with claimStatement
+ 					(a TriplePattern with gpSubject (the Drone),		
+ 									 with gpPredicate hasConcern,
+ 									 with gpObject (the Concern)),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the Concern),
+ 									 with gpPredicate ofType,
+ 									 with gpObject resDeliveryAbility),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the Concern),
+ 									 with gpPredicate ofClass,
+ 									 with gpObject Integrity), 									  									 
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the Concern),
+ 									 with gpPredicate ofSeverity,
+ 									 with gpObject (a Severity)),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the Severity),
+ 									 with gpPredicate lessSevere,
+ 									 with gpObject HAZARDOUS)
+ 	           ).
+
+
+ S1.1.1 (note "Argument: By G1.1.1.1, the actuation and delivery mechanisms have no integrity or availability concerns") is a Strategy,
+     with inContextOf (an ExplanatoryContext C6 
+     	                  with reference (an InformationObject) with description "The resilience to the loss of delivery ability has a hazardous integrity concern if the actuation or delivery mechanism have an integrity or availability concern."
+     ).
+ 
+ G1.1.1 supportedBy S1.1.1 .
+ 
+ S1.1.1 supportedBy G1.1.1.1 .
+
+ G1.1.1.1 (note "The actuation and delivery mechanism shall have no integrity or availability concerns") is a Goal,
+  	with inContextOf (a ReferentialContext C1), //Referencing the drone with the context C1 defined previously
+ 	with inContextOf (a ReferentialContext C3 with reference (an Actuation) with description "The actuation subsystem of a drone"),
+ 	with inContextOf (a ReferentialContext C4 with reference (a DeliveryItemMechanism) with description "The deliveryItemMechanism subsystem of a drone"),
+ 	has claim (a Claim with claimStatement
+ 					(a TriplePattern with gpSubject (the Drone),		
+ 									 with gpPredicate hasActuator,
+ 									 with gpObject (the Actuation)),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the Actuation),
+ 									 with gpPredicate hasIConcern,
+ 									 with gpObject false),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the Actuation),
+ 									 with gpPredicate hasAConcern,
+ 									 with gpObject false), 									 
+ 		            with claimStatement
+ 					(a TriplePattern with gpSubject (the Drone),		
+ 									 with gpPredicate hasDIMechanism,
+ 									 with gpObject (the DeliveryItemMechanism)), 									 
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the DeliveryItemMechanism),
+ 									 with gpPredicate hasIConcern,
+ 									 with gpObject false),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the DeliveryItemMechanism),
+ 									 with gpPredicate hasAConcern,
+ 									 with gpObject false)
+ 	           ).
+ 
+ S1.1.1.1 (note "Argument: The probability that actuation and delivery mechanism will have no concerns is confirmed by attack/defense tree analysis performed by Soteria++") is a Strategy,
+   with inContextOf (a ReferentialContext C10 
+     	                  with location "https://github.com/ge-high-assurance/assurance-case/tree/master/DeliveryDrone/context/CASE_Consolidated_Properties.aadl" with description "CASE Consolidated properties.").
+ 
+ G1.1.1.1 supportedBy S1.1.1.1 .
+ 
+ E1 (note "Soteria++ output of probability of the minimum cutsets") is a Solution,
+ 	with evidence (an EvidenceReference with location "https://github.com/ge-high-assurance/assurance-case/tree/master/DeliveryDrone/evidence/ImplProperties.xml").
+
+ S1.1.1.1 supportedBy E1 .
+ //end of CyberReq01 subtree  
+
+  //start of CyberReq02 subtree
+ G1.1.2 (note "The drone's resilience to malicious commands shall have integrity concern less severe than Hazardous") is a Goal, //(CyberReq02)
+  	with inContextOf (a ReferentialContext C1), //Referencing the drone with the context C1 defined previously
+ 	with inContextOf (a ExplanatoryContext C6 with reference (a Concern) with description "A concern affecting the resilience to malicious commands"),
+ 	has claim (a Claim with claimStatement
+ 					(a TriplePattern with gpSubject (the Drone),		
+ 									 with gpPredicate hasConcern,
+ 									 with gpObject (the Concern)),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the Concern),
+ 									 with gpPredicate ofType,
+ 									 with gpObject resMaliciousCommands),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the Concern),
+ 									 with gpPredicate ofClass,
+ 									 with gpObject Integrity), 									  									 
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the Concern),
+ 									 with gpPredicate ofSeverity,
+ 									 with gpObject (a Severity)),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the Severity),
+ 									 with gpPredicate lessSevere,
+ 									 with gpObject HAZARDOUS)
+ 	           ).
+
+ S1.1.2 (note "Argument: By G1.1.2.1, The delivery mechanism does not have any integrity concern") is a Strategy,
+      with inContextOf (an ExplanatoryContext C6 
+     	                  with reference (an InformationObject) with description "The resilience to malicious commands has a hazardous integrity concern if the  delivery mechanism has an integrity concern."
+     ).
+ 
+ G1.1.2 supportedBy S1.1.2 .
+
+ S1.1.2 supportedBy G1.1.2.1 .
+  
+ G1.1.2.1 (note "The delivery mechanism shall not have any integrity concern") is a Goal, 
+ 	with inContextOf (a ReferentialContext C1), //Referencing the drone with the context C1 defined previously
+ 	with inContextOf (a ReferentialContext C4), //Referencing the deliveryItemMechanism subsystem with the context C4 defined previously
+ 	has claim (a Claim with claimStatement
+ 					(a TriplePattern with gpSubject (the Drone),		
+ 									 with gpPredicate hasDIMechanism,
+ 									 with gpObject (the DeliveryItemMechanism)),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the DeliveryItemMechanism),
+ 									 with gpPredicate hasIConcern,
+ 									 with gpObject false)
+ 	           ).
+
+ S1.1.2.1 (note "Argument: The probabilities are confirmed by attack/defense tree analysis performed by Soteria++") is a Strategy,
+   with inContextOf (a ReferentialContext C9 
+     	                  with location "https://github.com/ge-high-assurance/assurance-case/tree/master/DeliveryDrone/context/CASE_Consolidated_Properties.aadl" with description "CASE Consolidated properties.").
+ 
+ G1.1.2.1 supportedBy S1.1.2.1 .
+ 
+ E2 (note "Soteria++ output of probability of the minimum cutset") is a Solution,
+ 	with evidence (an EvidenceReference with location "https://github.com/ge-high-assurance/assurance-case/tree/master/DeliveryDrone/evidence/ImplProperties.xml").
+
+ S1.1.2.1 supportedBy E2 .
+ //end of CyberReq02 subtree
+ 	           
+
+ G1.1.3 (note "The loss of availability of actuation shall be less than 1e-07 pfh ") is a Goal, //(SafetyReq01)
+ 	with inContextOf (a ReferentialContext C1), //Referencing the drone with the context C1 defined previously
+ 	with inContextOf (a ReferentialContext C3), //Referencing the actuation subsystem with the context C3 defined previously
+ 	has claim (a Claim with claimStatement
+ 					(a TriplePattern with gpSubject (the Drone),		
+ 									 with gpPredicate hasActuator,
+ 									 with gpObject (the Actuation)),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the Actuation),
+ 									 with gpPredicate lossOfAvailability,
+ 									 with gpObject (a Probability)),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the Probability),
+ 									 with gpPredicate lessthan,
+ 									 with gpObject 1e-07)
+ 	           ).
+ 	           
+ S1.1.3 (note "Argument: The probabilities are confirmed by fault-tree analysis performed by Soteria++") is a Strategy.
+ 
+ G1.1.3 supportedBy S1.1.3 .
+ 
+ E3 (note "Soteria++ output of probability of the minimum cutset") is a Solution,
+ 	with evidence (an EvidenceReference with location "https://github.com/ge-high-assurance/assurance-case/tree/master/DeliveryDrone/evidence/ImplProperties-safety.xml").
+
+ S1.1.3 supportedBy E3 .
+
+
+
+ //right subtree of G1
+ G1.2 (note "The delivery information shall be reliable ") is a Goal, //(MReq02)
+ 	with inContextOf (a ReferentialContext C1), //Referencing the drone with the context C1 defined previously
+ 	with inContextOf (a ReferentialContext C2), //Referencing the delivery event with the context C2 defined previously
+ 	has claim (a Claim with claimStatement
+ 					(a TriplePattern with gpSubject (the Drone),		
+ 									 with gpPredicate performs,
+ 									 with gpObject (the DeliveryEvent)),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the DeliveryEvent),
+ 									 with gpPredicate information,
+ 									 with gpObject (a DeliveryInformation)),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the DeliveryInformation),
+ 									 with gpPredicate reliability,
+ 									 with gpObject true) 	
+ 	           ).
+ 	
+ S1.2 (note "Argument: By G1.2.1, the delivery mechanism will perform within acceptable error bounds") is a Strategy.
+ 
+ G1.2 supportedBy S1.2 .
+ S1.2 supportedBy G1.2.1 .
+  
+ G1.2.1 (note "The loss of integrity of delivery information shall be less than 1e-07 pfh ") is a Goal, //(SafetyReq02) (note - Same as CyberReq02)
+ 	with inContextOf (a ReferentialContext C1), //Referencing the drone with the context C1 defined previously
+ 	with inContextOf (a ReferentialContext C4), //Referencing the deliveryItemMechanism subsystem with the context C4 defined previously
+ 	has claim (a Claim with claimStatement
+ 					(a TriplePattern with gpSubject (the Drone),		
+ 									 with gpPredicate hasDIMechanism,
+ 									 with gpObject (the DeliveryItemMechanism)),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the DeliveryItemMechanism),
+ 									 with gpPredicate lossOfIntegrity,
+ 									 with gpObject (a Probability)),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the Probability),
+ 									 with gpPredicate lessthan,
+ 									 with gpObject 1e-07)
+ 	           ).
+
+
+ S1.2.1 (note "Argument: The probabilities are confirmed by fault-tree analysis performed by Soteria++") is a Strategy.
+ 
+ G1.2.1 supportedBy S1.2.1 .
+ 
+ E4 (note "Soteria++ output of probability of the minimum cutset") is a Solution,
+ 	with evidence (an EvidenceReference with location "https://github.com/ge-high-assurance/assurance-case/tree/master/DeliveryDrone/evidence/ImplProperties-safety.xml").
+
+ S1.2.1 supportedBy E4 .

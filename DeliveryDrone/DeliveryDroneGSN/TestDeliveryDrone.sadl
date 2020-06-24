@@ -1,0 +1,70 @@
+ uri "http://sadl.org/TestDeliveryDrone.sadl" alias TestDeliveryDroneGSN.
+ 
+ import "http://sadl.org/DeliveryDroneGSN.sadl".
+ 
+ Test: "select (count(*) as ?count) where {?x <rdf:type> <Goal>}" = 10.
+ Ask: "select ?x where {?x <rdf:type> <Goal>} order by ?x".
+
+ Test: "select (count(*) as ?count) where {?x <rdf:type> <Strategy>}" = 8.
+ Ask: "select ?x where {?x <rdf:type> <Strategy>} order by ?x".
+
+ Test: "select (count(*) as ?count) {select distinct ?x where {?x <rdf:type> ?t . values ?t {<ReferentialContext> <ExplanatoryContext>}}}" = 9.
+ Ask: "select distinct ?x where {?x <rdf:type> ?t . values ?t {<ReferentialContext> <ExplanatoryContext>}} order by ?x".
+ 
+ Test: "select (count(*) as ?count) where {?x <rdf:type> <Solution>}" = 4.
+ Ask: "select ?x where {?x <rdf:type> <Solution>} order by ?x".
+ 
+ Test: "select (count(*) as ?count) where {?x <rdf:type> <Goal> . filter not exists {?x <supportedBy> ?spt}}" =  0.
+ Ask: "select ?goal where {?goal <rdf:type> <Goal> . filter not exists {?goal <supportedBy> ?spt}}".
+ 
+// Graph: "construct {?s ?p ?o} where { ?s ?p ?o . values ?p {<inContextOf> <supportedBy>}} ".
+
+
+// comment / uncomment lines to get different nodes like circle, parallelogram etc.
+// comment / uncomment to split text across multiple lines
+// not using the node shapes defined in GSNRendering.sadl
+ Graph: "select  ?src ?p ?dest ?dest_shape ?dest_style ?dest_fillcolor ?dest_width ?dest_height ?dest_fixedsize
+where { ?s ?p ?o . values ?p {<inContextOf> <supportedBy>}
+. ?s <rdfs:comment> ?src_desc 
+. OPTIONAL{?o <description> ?dest_desc}
+. OPTIONAL{?o <rdfs:comment> ?dest_desc}
+. OPTIONAL{?o <reference> ?ref . ?ref <description> ?dest_desc}
+#. LET(?src := ?src_desc) . LET(?dest := ?dest_desc) #use this if we do not want split text ; but then comment out 'splitting' text below
+
+# the ?src_desc will be split into 3 parts <front, middle, end> these will be indicated by suffix f, m, e resp;
+# we will also have suffix 'me' for the <middle, end> string
+. LET(?src_desc_me := replace(?src_desc,'^.{35}[^ ]* ','')) #split ?src_desc across multiple lines generating ?src; ?src_desc_me is missing the initial part
+. LET(?src_desc_len := strlen(?src_desc)) # original string length (of ?src_desc)
+. LET(?src_desc_me_len := strlen(?src_desc_me)) #length of string that is missing initial part
+. LET(?src_desc_f := substr(?src_desc,1,?src_desc_len - ?src_desc_me_len)) #the initial part
+. LET(?src_desc_e := replace(?src_desc_me,'^.{35}[^ ]* ','')) # now we will split the string which does not have initial part; ?src_desc_e is the third part
+. LET(?src_desc_e_len := strlen(?src_desc_e)) #length of third part
+. LET(?src_desc_m := substr(?src_desc_me,1,?src_desc_me_len - ?src_desc_e_len)) # the middle part
+. LET(?f10 := concat(?src_desc_m, '\\n', ?src_desc_e))
+. LET(?f11 := COALESCE(?f10, ?src_desc_me)) #?f11 is missing the initial part
+. LET(?g1 := concat(?src_desc_f, '\\n', ?f11))
+. LET(?src2 := COALESCE(?g1, ?src_desc))
+. LET(?src := concat(str(?s), '\\n',?src2))
+
+# now splitting ?dest_desc
+. LET(?dest_desc_me := replace(?dest_desc,'^.{35}[^ ]* ','')) #split ?dest_desc across multiple lines generating ?dest; ?dest_desc_me is missing the initial part
+. LET(?dest_desc_len := strlen(?dest_desc)) # original string length (of ?dest_desc)
+. LET(?dest_desc_me_len := strlen(?dest_desc_me)) #length of string that is missing initial part
+. LET(?dest_desc_f := substr(?dest_desc,1,?dest_desc_len - ?dest_desc_me_len)) #the initial part
+. LET(?dest_desc_e := replace(?dest_desc_me,'^.{35}[^ ]* ','')) # now we will split the string which does not have initial part; ?dest_desc_e is the third part
+. LET(?dest_desc_e_len := strlen(?dest_desc_e)) #length of third part
+. LET(?dest_desc_m := substr(?dest_desc_me,1,?dest_desc_me_len - ?dest_desc_e_len)) # the middle part
+. LET(?d10 := concat(?dest_desc_m, '\\n', ?dest_desc_e))
+. LET(?d11 := COALESCE(?d10, ?dest_desc_me)) #?d11 is missing the initial part
+. LET(?e1 := concat(?dest_desc_f, '\\n', ?d11))
+. LET(?dest2 := COALESCE(?e1, ?dest_desc))
+. LET(?dest := concat(str(?o), '\\n',?dest2))
+
+# uncomment the following to get different shapes - but they do not look good
+. ?o <rdf:type> ?t2 
+. OPTIONAL{FILTER(regex(str(?t2),'Solution')) . LET(?dest_shape := 'circle') }
+. OPTIONAL{FILTER(regex(str(?t2),'Strategy')) . LET(?dest_shape := 'parallelogram') }
+. OPTIONAL{FILTER(regex(str(?t2),'Context')) . LET(?dest_style := 'rounded') . LET(?dest_shape := 'box')}
+. OPTIONAL{FILTER(regex(str(?t2),'UnexpGoal')) . LET(?dest_shape := 'trapezium')}
+} ". 
+

@@ -1,0 +1,24 @@
+ uri "http://sadl.org/GSNRendering.sadl" alias GSNRendering.
+ 
+ import "http://sadl.org/gsn.sadl".
+ 
+ NodeShape is a class, must be one of {
+ 	Rectangle, 
+ 	Parallelogram, 
+ 	Circle, 
+ 	RoundEndedRectangle,
+ 	OvalWithJ (note "An oval with a 'J' next to it"), 
+ 	OvalWithA (note "An oval with an 'A' next to it"), 
+ 	RectangleWithDiamondDecorator (note "has diamond centered beneath"),
+ 	ParallelogramWithDiamondDecorator (note "has diamond centered beneath")}. 	
+ nodeShape describes GSN_Element with values of type NodeShape.
+ nodeShape of Goal always has value Rectangle.
+ nodeShape of Strategy always has value Parallelogram.
+ nodeShape of Solution always has value Circle.
+ nodeShape of Context always has value RoundEndedRectangle.
+ nodeShape of Justification always has value OvalWithJ.
+ nodeShape of Assumption always has value OvalWithA.
+ nodeShape of UndevelopedGoal always has value RectangleWithDiamondDecorator.
+ nodeShape of UndevelopedStrategy always has value ParallelogramWithDiamondDecorator.
+  	
+ 

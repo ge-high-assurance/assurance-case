@@ -1,0 +1,51 @@
+ uri "http://sadl.org/GsnInfer.sadl" alias GsnInfer.
+ 
+ import "http://sadl.org/UasGsn.sadl".
+ 
+ confirmed describes GSN_Element with a single value of type boolean.
+ 
+// Rule Confirmed: 
+// 	if x is a GSN_Element and y is a GSN_Element and x != y and x supportedBy y and y confirmed true
+// 	then x confirmed true.
+ 	
+// Rule Confirmed: 
+// 	if x is a GSN_Element and 
+// 		y is a GSN_Element and
+// 		x supportedBy y and
+// 		yc is confirmed of y and
+//  		numconfirmed is countMatches(x, supportedBy, y, y, confirmed, true) and
+// 		numconfirmed > 0 and
+// 		numchild is countMatches(x, supportedBy) and
+// 		print(localname(x), "num children: ", numchild, ", num confirmed: ", numconfirmed) and
+// 		numchild == numconfirmed
+// 	then x confirmed true.
+
+ Rule Confirmed1: 
+ 	if x is a GSN_Element and 
+ 		y is a GSN_Element and
+ 		x supportedBy y and
+ 		numchild = countMatches(x, supportedBy) and
+ 		numchild == 1 and
+ 		y confirmed true 
+ 		and print(localname(x), ": ", numchild, " child confirmed")
+ 	then x confirmed true.
+
+ Rule Confirmed2: 
+ 	if x is a GSN_Element and 
+ 		y is a GSN_Element and
+ 		x supportedBy y and
+ 		x supportedBy z and
+ 		numchild = countMatches(x, supportedBy) and
+ 		numchild == 2 and
+ 		y confirmed true and
+ 		z confirmed true
+ 		and print(localname(x), ": ", numchild, " children confirmed")
+ 	then x confirmed true.
+
+ E4 confirmed true.
+// E3 confirmed true.
+// E2 confirmed true.
+ E1 confirmed true.
+ 
+ Ask: select node where node has confirmed true. // order by node.
+ 

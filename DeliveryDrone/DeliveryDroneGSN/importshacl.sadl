@@ -1,0 +1,10 @@
+ uri "http://sadl.org/importshacl.sadl" alias importshacl.
+ 
+ import "http://www.w3.org/ns/shacl" as sh.
+ 
+ Ask: "select ?d where {<sh:subject> <rdfs:domain> ?d}".
+ Ask: select p, v where sh:TripleRule has p v.
+ Ask: "select ?d where {?d <rdfs:domain> <sh:TripleRule>}".
+ Ask: "select ?r where {?r <rdfs:range> <sh:TripleRule>}".
+ Ask: "select ?s ?p ?o where {?p <rdfs:range> <sh:Rule> . OPTIONAL{?s ?p ?o}}".
+ 

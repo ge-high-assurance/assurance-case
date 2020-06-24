@@ -1,0 +1,110 @@
+ uri "http://sadl.org/gsn.sadl" alias gsn
+ (note "Developed from the 'Goal Structuring Notation Community Standard, Version 2', January 2018, 
+available for download from https://scsc.uk/r141B:1").
+
+ import "http://sadl.org/Shared.sadl".
+  
+ Argument (note "a connected series of claims intended to establish an overall claim") is a class.
+ 
+ GSN (alias "Goal Structuring Notation") 
+ 	(note "a graphical argument notation, capturing a hierarchy of claims") is a type of Argument,
+ 	described by rootGoal with a single value of type Goal.
+ 	
+ GSN_Element (note "Notation elements of GSN, see https://scsc.uk/r141B:1?t=1") is a class. 
+ {  Goal
+ 		(note "a requirements statement; a claim forming part of an argument"), 
+ 	Strategy 
+ 		(note "mediates between a goal and its subgoals, explaining basis of inference"), 
+ 	Solution
+ 		(note "presents a reference to an evidence item"), 
+ 	Context 
+ 		(alias "scope over which claim of goal is made or strategy applies")
+ 		(note "applies to argument substructure without repetition"), 
+ 	gsn:Assumption 
+ 		(alias "an unsubstantiated statement")
+ 		(note "a goal or strategy in the context of an assumption is only applicable when the assumption is true")
+ 		(note "applies to argument substructure without repetition")
+ 		(note "complete sentences in the form of a noun-phrase + a verb-phrase"), 
+ 	Justification
+ 		(alias "rational for the associated claim of the goal or strategy")
+ 		(note "applies only to goal or strategy and not to argument substructure")
+ 		(note "complete sentences in the form of a noun-phrase + a verb-phrase")
+ } are types of GSN_Element.	
+ 	 
+ supportedBy (note "indicated by solid arrow head")
+ 	describes {Goal or Strategy} with values of type {Goal or Strategy or Solution}. 
+ supportedBy of Goal only has values of type {Goal or Strategy or Solution}.
+ supportedBy of Strategy only has values of type Goal.
+  	
+ inContextOf (note "indicated by hollow arrow head", "Kelly's thesis included Solution in the domain")
+ 	describes {Goal or Strategy} with values of type {Context or Assumption or Justification}.
+ inContextOf of Goal only has values of type {Context or Assumption or Justification}.
+ inContextOf of Strategy only has values of type {Context or Assumption or Justification}.
+ 	
+ {  ReferentialContext
+ 		(alias "referential context")
+ 		(note "reference is a noun-phrase"), 
+ 	ExplanatoryContext
+ 		(alias "explanatory contextual information")
+ 		(note "complete sentences of form a noun-phrase + a verb-phrase")
+ } are types of Context.
+ reference describes ReferentialContext with a single value of type class.  // Reference.
+ Reference is a class, described by description with values of type string,
+ 	described by content with values of type InformationObject,
+ 	described by location with values of type anyURI.
+ explanation describes ExplanatoryContext with values of type GraphPattern.
+ 	
+ UndevelopedElement is a type of GSN_Element. 	
+ UndevelopedGoal is a type of {Goal and UndevelopedElement}.
+ UndevelopedStrategy is a type of {Strategy and UndevelopedElement}.
+  	
+ Claim 
+ 	(alias "goal statement")
+ 	(note "a proposition in the form of a noun-phrase + a verb-phrase") is a class.
+ claim describes Goal with a single value of type Claim.
+ claimStatement describes Claim with values of type GraphPattern.
+  	
+ EvidenceReference 
+ 	(alias "reference to evidence")
+ 	(note "a noun-phrase") is a type of Reference.
+ evidence describes Solution with values of type EvidenceReference.
+  
+ SIL (alias "Safety Integrity Level") is a class. 	
+ 
+ ZeroToOne is a type of decimal [0,1].
+ BDU is a class, described by belief with a single value of type ZeroToOne,
+ 	 described by disBelief with a single value of type ZeroToOne,
+ 	  described by uncertainty with a single value of type ZeroToOne.
+
+ bdu describes {Goal or Solution} with a single value of type BDU.
+ 
+ SubGoalToGoalInferenceRule (note "when there is an explicit rule to implement a Strategy") is a class,
+ 	described by inferFrom with a single value of type {Solution or Goal},
+ 	described by inferTo with a single value of type {Goal},
+ 	described by informedBy with a single value of type Strategy,	// can be inferred
+ 	described by inferringRule with values of type ^Rule.
+ 	
+ TestCase is a class described by wasRun with a single value of type boolean,
+ 	described by passed with a single value of type boolean. 	
+ testCase describes Solution with values of type TestCase. 	
+ 
+ Agent is a class.
+ Expert is a type of Agent. 	
+ relationship of Expert to EvidenceReference is reviews.
+ 
+ Evidence is a type of InformationObject.
+ Proof is a type of Evidence.
+ A System is a VerificationTool only if generates has at least 1 value of type Proof.
+
+ Rule BDUfromTestCases1:
+ 	if s is a Solution and countMatches(s, testCase) > 0
+ 	then there exists a BDU and s has bdu (the BDU).
+ 
+ Rule BDUfromTestCases2:
+ 	if s is a Solution and s has bdu x and tc is a testCase and
+ 		numCases = countMatches(s, testCase) and
+ 		numRun = countMatches(s, testCase, tc, tc, wasRun, true) and
+ 		numPassed = countMatches(s, testCase, tc, tc, passed, true) 
+ 	then x belief (numPassed/numCases) and x has disBelief ((numRun - numPassed)/numCases)
+ 		and x has uncertainty ((numCases - numRun)/numCases).
+ 

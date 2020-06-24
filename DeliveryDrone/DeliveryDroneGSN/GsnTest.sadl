@@ -1,0 +1,19 @@
+ uri "http://sadl.org/GsnTest.sadl" alias GsnTest.
+ 
+ import "http://sadl.org/gsn.sadl".
+ 
+ S1 is a Solution 
+ 	with testCase (a TestCase TC1 with wasRun true, with passed true),
+ 	with testCase (a TestCase TC2 with wasRun true, with passed true),
+ 	with testCase (a TestCase TC3 with wasRun true, with passed true),
+ 	with testCase (a TestCase TC4 with wasRun true, with passed true),
+ 	with testCase (a TestCase TC5 with wasRun true, with passed true),
+ 	with testCase (a TestCase TC6 with wasRun true, with passed true),
+ 	with testCase (a TestCase TC7 with wasRun true, with passed false),
+ 	with testCase (a TestCase TC8 with wasRun true, with passed false),
+ 	with testCase (a TestCase TC9 with wasRun false),
+ 	with testCase (a TestCase TC10 with wasRun false).
+ 	
+ Ask: select b, d, u where S1 has bdu x and x has belief b and x has disBelief d and x has uncertainty u.
+// Test: (select b, d, u where S1 has bdu x and x has belief b and x has disBelief d and x has uncertainty u) is [.6,.2,.2].
+ Ask: select p v where S1 has p v.

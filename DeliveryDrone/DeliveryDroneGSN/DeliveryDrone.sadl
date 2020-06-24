@@ -1,0 +1,59 @@
+ uri "http://sadl.org/DeliveryDrone.sadl" alias DeliveryDrone.
+ 
+ import "http://sadl.org/BasicConcepts.sadl".
+ 
+ ConcernClass is a class, must be one of {Confidentiality, Integrity, Availability}.
+ Severity is a class, must be one of {CATASTROPHIC, HAZARDOUS, MAJOR, MINOR, NONE}.
+ lessSevere describes Severity with values of type Severity.
+ 
+ ConcernType is a class, must be one of {resDeliveryAbility, resMaliciousCommands}.
+ 
+ Concern is a class,
+ 	described by ofType with a single value of type ConcernType, 
+ 	described by ofClass with a single value of type ConcernClass,
+ 	described by ofSeverity with a single value of type Severity.
+ 
+ 
+ Probability is a type of ScientificConcept, 
+ 	described by lessthan with values of type Probability. //lessthan relationship between probabilities
+ 
+ DeliveryInformation is a type of InformationObject,
+ 	described by reliability with a single value of type boolean. //true if the information is reliable
+ 
+ Drone is a type of System,
+    described by hasConcern with a single value of type Concern, //the severity of loss of ability
+  	described by hasActuator with a single value of type Actuation, //the actuator subsystem
+  	described by hasDIMechanism with a single value of type DeliveryItemMechanism, ///the deliveryItemMechanism subsystem
+  	described by performs with values of type DeliveryEvent. //a drone can perform deliveries.
+  	
+ DeliveryEvent is a type of Event, //the event of delivering a package
+ 	described by completed  with a single value of type boolean, //true if delivered to a location
+ 	described by information with a single value of type DeliveryInformation. //the associated delivery information (delivery_status)
+ 	
+ Actuation is a type of Subsystem.
+ component of Drone has exactly 1 value of type Actuation.	
+ DeliveryItemMechanism is a type of Subsystem.
+ component of Drone has exactly 1 value of type DeliveryItemMechanism.	 
+ PositionEstimator is a type of Subsystem.
+ component of Drone has exactly 1 value of type PositionEstimator.
+ Navigation is a type of Subsystem.
+ component of Drone has exactly 1 value of type Navigation.
+ FlightControl is a type of Subsystem. 
+ component of Drone has exactly 1 value of type FlightControl.
+ DeliveryPlanner is a type of Subsystem.
+ component of Drone has exactly 1 value of type DeliveryPlanner.
+ Radio is a type of Subsystem.
+ component of Drone has exactly 1 value of type Radio.
+ Camera is a type of Subsystem.
+ component of Drone has exactly 1 value of type Camera.
+ Connector is a type of Subsystem.
+ component of Drone has exactly 1 value of type Connector.
+  
+ lossOfAvailability of Subsystem has a single value of type Probability. //probability of loss of availability 
+ lossOfIntegrity of Subsystem has a single value of type Probability. //probability of loss of integrity 
+  
+ hasAConcern of Subsystem has a single value of type boolean. //true if has availability concern
+ hasIConcern of Subsystem has a single value of type boolean. //true if has integrity concern
+ 
+ 
+ 

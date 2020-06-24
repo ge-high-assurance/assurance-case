@@ -1,0 +1,11 @@
+ uri "http://sadl.org/Shared.sadl" alias Shared.
+ 
+
+ System is a class.
+ Subsystem is a type of System. 
+ component (note "property of aggregation of parts to whole") 
+	describes System with values of type Subsystem.
+	
+ InformationObject is a class.
+ generates is a property with values of type InformationObject.
+ 

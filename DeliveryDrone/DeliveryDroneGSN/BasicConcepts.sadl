@@ -1,0 +1,29 @@
+uri "http://sadl.org/BasicConcepts.sadl" alias basic version "1.0" 
+	(note "These concepts are foundational to any physical system").
+	
+import "http://sadl.org/Shared.sadl".	
+
+Equipment is a type of Subsystem 
+	described by basic:state with a single value of type State
+	described by characterizedBy with a single value of type Datasheet.
+Datasheet is a type of InformationObject.
+State is a class, must be one of {Working, Failed (alias "not working")}.
+
+controls describes Equipment with values of type Equipment.
+  
+Sensor is a type of Equipment.
+measures describes Sensor with values of type Observation.
+Observation is a type of UnittedQuantity.
+correct describes UnittedQuantity with a single value of type boolean.
+
+Algorithm is a type of InformationObject. 	
+Computation is a type of Event,
+ 	described by basic:input with values of type UnittedQuantity,
+ 	described by algorithm with values of type Algorithm,
+ 	described by output with values of type UnittedQuantity.
+
+Communication is a class,
+ 	described by message with values of type class,
+ 	described by sender with values of type class,
+ 	described by recipient with values of type class.
+
