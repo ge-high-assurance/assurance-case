@@ -21,4 +21,12 @@
  nodeShape of UndevelopedGoal always has value RectangleWithDiamondDecorator.
  nodeShape of UndevelopedStrategy always has value ParallelogramWithDiamondDecorator.
   	
+graphviz_shape describes GSN_Element with a single value of type string.
+graphviz_type describes GSN_Element with a single value of type string.
+
+ graphviz_shape of Goal always has value "rect".
+ graphviz_shape of Strategy always has value "parallelogram".
+ graphviz_shape of Solution always has value "circle".
+ graphviz_shape of Context always has value "rect".
+ graphviz_type of Context always has value "rounded". 
  

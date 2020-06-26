@@ -1,5 +1,6 @@
  uri "http://sadl.org/TestDeliveryDrone.sadl" alias TestDeliveryDroneGSN.
  
+ import "http://sadl.org/GSNRendering.sadl".
  import "http://sadl.org/DeliveryDroneGSN.sadl".
  
  Test: "select (count(*) as ?count) where {?x <rdf:type> <Goal>}" = 10.
@@ -19,12 +20,33 @@
  
 // Graph: "construct {?s ?p ?o} where { ?s ?p ?o . values ?p {<inContextOf> <supportedBy>}} ".
 
+// this gets all the shapes
+// Ask: "select distinct ?s ?p ?o ?z2 ?z3 #?s ?p ?o ?src_shape ?dest_shape
+//where { ?s ?p ?o . values ?p {<inContextOf> <supportedBy>}
+//. ?s <rdf:type> ?z . ?z ?y2 ?z2 . FILTER (regex(str(?y2), 'hasValue')) 
+//. OPTIONAL {?z ?y3 ?z3 . FILTER(regex(str(?z3), 'rounded')) . FILTER (regex(str(?y3), 'hasValue'))}  
+//. ?o <rdf:type> ?z5 . ?z5 ?y5 ?z4 . FILTER (regex(str(?y5), 'hasValue')) 
+//. OPTIONAL {?z5 ?y6 ?z6 . FILTER(regex(str(?z6), 'rounded')) . FILTER (regex(str(?y6), 'hasValue'))}
+//}order by ?s ".
 
 // comment / uncomment lines to get different nodes like circle, parallelogram etc.
 // comment / uncomment to split text across multiple lines
-// not using the node shapes defined in GSNRendering.sadl
- Graph: "select  ?src ?p ?dest ?dest_shape ?dest_style ?dest_fillcolor ?dest_width ?dest_height ?dest_fixedsize
-where { ?s ?p ?o . values ?p {<inContextOf> <supportedBy>}
+// comment / uncomment to show inContextOf
+// only defined some of the shapes in GSNRendering.sadl for visualizing
+// graph seems fine - no duplicate arrows
+ Graph: "select distinct ?src ?p ?dest ?src_shape ?src_style ?dest_shape ?dest_style
+where { ?s ?p ?o 
+# choose whether to show inContextOf or not by commenting  one of the following 2 lines
+. values ?p { <supportedBy>} 
+#. values ?p {<inContextOf> <supportedBy>}
+# set shape and style
+. ?s <rdf:type> ?z . ?z ?y2 ?src_shape . FILTER (regex(str(?y2), 'hasValue')) 
+. FILTER(regex(str(?src_shape), 'rect') || regex(str(?src_shape),'parallelogram') || regex(str(?src_shape),'circle')) 
+
+. ?o <rdf:type> ?z5 . ?z5 ?y5 ?dest_shape . FILTER (regex(str(?y5), 'hasValue')) 
+. FILTER(regex(str(?dest_shape), 'rect') || regex(str(?dest_shape),'parallelogram') || regex(str(?dest_shape),'circle')) 
+. OPTIONAL{values ?p {<inContextOf>} . LET (?dest_style := 'rounded')}
+
 . ?s <rdfs:comment> ?src_desc 
 . OPTIONAL{?o <description> ?dest_desc}
 . OPTIONAL{?o <rdfs:comment> ?dest_desc}
@@ -59,12 +81,4 @@ where { ?s ?p ?o . values ?p {<inContextOf> <supportedBy>}
 . LET(?e1 := concat(?dest_desc_f, '\\n', ?d11))
 . LET(?dest2 := COALESCE(?e1, ?dest_desc))
 . LET(?dest := concat(str(?o), '\\n',?dest2))
-
-# uncomment the following to get different shapes - but they do not look good
-. ?o <rdf:type> ?t2 
-. OPTIONAL{FILTER(regex(str(?t2),'Solution')) . LET(?dest_shape := 'circle') }
-. OPTIONAL{FILTER(regex(str(?t2),'Strategy')) . LET(?dest_shape := 'parallelogram') }
-. OPTIONAL{FILTER(regex(str(?t2),'Context')) . LET(?dest_style := 'rounded') . LET(?dest_shape := 'box')}
-. OPTIONAL{FILTER(regex(str(?t2),'UnexpGoal')) . LET(?dest_shape := 'trapezium')}
-} ". 
-
+} ".
