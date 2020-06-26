@@ -1,0 +1,13 @@
+ uri "http://sadl.org/TestDeliveryDroneQueries.sadl" alias TestDeliveryDroneGSNQueries.
+ 
+ import "http://sadl.org/DeliveryDroneGSN.sadl".
+ 
+// Graph: "construct {?s ?p ?o} where { ?s ?p ?o . values ?p {<location>}} ".
+
+// Graph: "construct {?s ?p ?o} where { ?s ?p ?o . values ?p {<inContextOf>}} ".
+
+// Graph: "construct {?s ?p ?o} where { ?s ?p ?o . values ?p {<supportedBy>}} ".
+
+// Graph: "construct {?s ?p ?o} where { ?s ?p ?o . values ?p {<evidence>}} ".
+
+// Graph: "construct {?s ?p ?o} where { ?s ?p ?o . values <g> {<inContextOf> <location>}} ".
