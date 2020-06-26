@@ -1,0 +1,86 @@
+ uri "http://sadl.org/CyberReq01GSN.sadl" alias CyberReq01GSN.
+ 
+ import "http://sadl.org/gsn.sadl".
+ import "http://sadl.org/DeliveryDrone.sadl".
+
+ GSNCyberReq01 is a GSN with rootGoal G1.1.1 .
+ 
+
+ //start of CyberReq01 subtree
+ G1.1.1 (note "The drone's resilience to the loss of delivery ability shall have integrity concern less severe than Hazardous") is a Goal, //(CyberReq01)  
+	with inContextOf (an ExplanatoryContext C1 with reference (a Drone) with description "A package delivery drone")
+	with inContextOf (a ExplanatoryContext C5 with reference (a Concern) with description "A concern affecting the resilience to loss of delivery ability"),
+	has claim (a Claim with claimStatement
+ 					(a TriplePattern with gpSubject (the Drone),		
+ 									 with gpPredicate hasConcern,
+ 									 with gpObject (the Concern)),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the Concern),
+ 									 with gpPredicate ofType,
+ 									 with gpObject resDeliveryAbility),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the Concern),
+ 									 with gpPredicate ofClass,
+ 									 with gpObject Integrity), 									  									 
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the Concern),
+ 									 with gpPredicate ofSeverity,
+ 									 with gpObject (a Severity)),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the Severity),
+ 									 with gpPredicate lessSevere,
+ 									 with gpObject HAZARDOUS)
+ 	           ).
+
+
+ S1.1.1 (note "Argument: By G1.1.1.1, the actuation and delivery mechanisms have no integrity or availability concerns") is a Strategy,
+     with inContextOf (an ExplanatoryContext C6 
+     	                  with reference (an InformationObject) with description "The resilience to the loss of delivery ability has a hazardous integrity concern if the actuation or delivery mechanism have an integrity or availability concern."
+     ).
+ 
+ G1.1.1 supportedBy S1.1.1 .
+ 
+ S1.1.1 supportedBy G1.1.1.1 .
+
+ G1.1.1.1 (note "The actuation and delivery mechanism shall have no integrity or availability concerns") is a Goal,
+  	with inContextOf (a ReferentialContext C1), //Referencing the drone with the context C1 defined previously
+ 	with inContextOf (a ReferentialContext C3 with reference (an Actuation) with description "The actuation subsystem of a drone"),
+ 	with inContextOf (a ReferentialContext C4 with reference (a DeliveryItemMechanism) with description "The deliveryItemMechanism subsystem of a drone"),
+ 	has claim (a Claim with claimStatement
+ 					(a TriplePattern with gpSubject (the Drone),		
+ 									 with gpPredicate hasActuator,
+ 									 with gpObject (the Actuation)),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the Actuation),
+ 									 with gpPredicate hasIConcern,
+ 									 with gpObject false),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the Actuation),
+ 									 with gpPredicate hasAConcern,
+ 									 with gpObject false), 									 
+ 		            with claimStatement
+ 					(a TriplePattern with gpSubject (the Drone),		
+ 									 with gpPredicate hasDIMechanism,
+ 									 with gpObject (the DeliveryItemMechanism)), 									 
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the DeliveryItemMechanism),
+ 									 with gpPredicate hasIConcern,
+ 									 with gpObject false),
+ 					with claimStatement
+ 					(a TriplePattern with gpSubject (the DeliveryItemMechanism),
+ 									 with gpPredicate hasAConcern,
+ 									 with gpObject false)
+ 	           ).
+ 
+ S1.1.1.1 (note "Argument: The probability that actuation and delivery mechanism will have no concerns is confirmed by attack/defense tree analysis performed by Soteria++") is a Strategy,
+   with inContextOf (a ReferentialContext C10 
+     	                  with location "https://github.com/ge-high-assurance/assurance-case/tree/master/DeliveryDrone/context/CASE_Consolidated_Properties.aadl" with description "CASE Consolidated properties.").
+ 
+ G1.1.1.1 supportedBy S1.1.1.1 .
+ 
+ E1 (note "Soteria++ output of probability of the minimum cutsets") is a Solution,
+ 	with evidence (an EvidenceReference with location "https://github.com/ge-high-assurance/assurance-case/tree/master/DeliveryDrone/evidence/ImplProperties.xml").
+
+ S1.1.1.1 supportedBy E1 .
+ //end of CyberReq01 subtree  
+

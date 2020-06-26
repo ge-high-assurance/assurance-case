@@ -1,7 +1,6 @@
- uri "http://sadl.org/TestDeliveryDrone.sadl" alias TestDeliveryDroneGSN.
+ uri "http://sadl.org/TestCyberReq02.sadl" alias TestCyberReq02GSN.
  
- import "http://sadl.org/GSNRendering.sadl".
- import "http://sadl.org/DeliveryDroneGSN.sadl".
+ import "http://sadl.org/CyberReq02GSN.sadl".
  
  Test: "select (count(*) as ?count) where {?x <rdf:type> <Goal>}" = 10.
  Ask: "select ?x where {?x <rdf:type> <Goal>} order by ?x".
@@ -20,26 +19,15 @@
  
 // Graph: "construct {?s ?p ?o} where { ?s ?p ?o . values ?p {<inContextOf> <supportedBy>}} ".
 
-// this gets all the shapes
-// Ask: "select distinct ?s ?p ?o ?z2 ?z3 #?s ?p ?o ?src_shape ?dest_shape
-//where { ?s ?p ?o . values ?p {<inContextOf> <supportedBy>}
-//. ?s <rdf:type> ?z . ?z ?y2 ?z2 . FILTER (regex(str(?y2), 'hasValue')) 
-//. OPTIONAL {?z ?y3 ?z3 . FILTER(regex(str(?z3), 'rounded')) . FILTER (regex(str(?y3), 'hasValue'))}  
-//. ?o <rdf:type> ?z5 . ?z5 ?y5 ?z4 . FILTER (regex(str(?y5), 'hasValue')) 
-//. OPTIONAL {?z5 ?y6 ?z6 . FILTER(regex(str(?z6), 'rounded')) . FILTER (regex(str(?y6), 'hasValue'))}
-//}order by ?s ".
 
 // comment / uncomment lines to get different nodes like circle, parallelogram etc.
 // comment / uncomment to split text across multiple lines
-// comment / uncomment to show inContextOf
-// only defined some of the shapes in GSNRendering.sadl for visualizing
-// graph seems fine - no duplicate arrows
+// not using the node shapes defined in GSNRendering.sadl
  Graph: "select distinct ?src ?p ?dest ?src_shape ?src_style ?dest_shape ?dest_style
 where { ?s ?p ?o 
 # choose whether to show inContextOf or not by commenting  one of the following 2 lines
 #. values ?p { <supportedBy>} 
 . values ?p {<inContextOf> <supportedBy>}
-
 # Set shape and style from GSNRendering.sadl
 # Comment out if using the manual shapes below
 #. ?s <rdf:type> ?z . ?z ?y2 ?src_shape . FILTER (regex(str(?y2), 'hasValue')) 
@@ -96,6 +84,5 @@ where { ?s ?p ?o
 . OPTIONAL{FILTER(regex(str(?t2),'Context')) . LET(?dest_style := 'rounded') . LET(?dest_shape := 'box')}
 . OPTIONAL{FILTER(regex(str(?t2),'UnexpGoal')) . LET(?dest_shape := 'trapezium')}
 
-} ".
-
+} ". 
 
